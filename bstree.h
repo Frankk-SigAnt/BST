@@ -49,7 +49,7 @@ namespace fsa
                 bst_iterator operator++(int)
                 {
                     bst_iterator _tmp_it = *this;
-                    operator++;
+                    *(this)++;
                     return _tmp_it;
                 }
 
@@ -62,7 +62,7 @@ namespace fsa
                 bst_iterator operator--(int)
                 {
                     bst_iterator _tmp_it = *this;
-                    operator--;
+                    *(this)--;
                     return _tmp_it;
                 }
             };
