@@ -6,7 +6,7 @@
 
 namespace fsa
 {
-    template<class _tp>
+    template<class T>
     class bstree
     {
         protected:
@@ -68,10 +68,10 @@ namespace fsa
             };
 
         public:
-            typedef _tp                value_type;
-            typedef _tp &              reference;
-            typedef bst_node<_tp>      node_type;
-            typedef bst_iterator<_tp>  iterator;
+            typedef T                value_type;
+            typedef T &              reference;
+            typedef bst_node<T>      node_type;
+            typedef bst_iterator<T>  iterator;
             typedef unsigned int       size_type;
 
         private:
@@ -109,8 +109,8 @@ namespace fsa
             void splice(bstree & _opr);
     };
 
-    template<class _tp>
-    void bstree<_tp>::destroy_node(bstree<_tp>::iterator _rm_iter)
+    template<class T>
+    void bstree<T>::destroy_node(bstree<T>::iterator _rm_iter)
     {
         if(_rm_iter == 0) return;
         destroy_node(_rm_iter->left);
@@ -118,30 +118,30 @@ namespace fsa
         delete _rm_iter;
     }
 
-    template<class _tp>
-    bstree<_tp>::~bstree()
+    template<class T>
+    bstree<T>::~bstree()
     {
         destroy_node(_root);
     }
 
-    template<class _tp>
-    bstree<_tp> & bstree<_tp>::operator=(bstree<_tp> & _opr)
+    template<class T>
+    bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
     {
         this->_root = _opr._root;
         _size = _opr._size;
         isempty = _opr.isempty;
     }
 
-    template<class _tp>
-    typename bstree<_tp>::iterator bstree<_tp>::begin()
+    template<class T>
+    typename bstree<T>::iterator bstree<T>::begin()
     {
         iterator _iter = _root;
         while(_iter->left != 0) _iter = _iter->left;
         return _iter;
     }
 
-    template<class _tp>
-    typename bstree<_tp>::iterator bstree<_tp>::end()
+    template<class T>
+    typename bstree<T>::iterator bstree<T>::end()
     {
         iterator _iter = _root;
         while(_iter->right != 0) _iter = _iter->right;
