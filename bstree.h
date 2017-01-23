@@ -10,32 +10,30 @@ namespace fsa
     class bstree
     {
         protected:
-            template<class _Ttp>
             struct bst_node
             {
-                _Ttp data;
+                T data;
                 bst_node * father;
                 bst_node * left, right;
 
-                bst_node(): data(_Ttp()), father(0), left(0), right(0) {}
-                bst_node(_Ttp & _val, bst_node * _pf = 0): data(_val), father(_pf), left(0), right(0) {}
-        };
+                bst_node(): data(T()), father(0), left(0), right(0) {}
+                bst_node(T & _val, bst_node * _pf = 0): data(_val), father(_pf), left(0), right(0) {}
+            };
 
-            template<class _Ttp>
             struct bst_iterator
             {
-                bst_node<_Ttp> * _ptr;
+                bst_node * _ptr;
 
-                bst_iterator(bst_node<_Ttp> * _Ptr_ = 0): _ptr(_Ptr_) {}
+                bst_iterator(bst_node * _Ptr_ = 0): _ptr(_Ptr_) {}
 
                 bst_iterator(bst_iterator & __it): _ptr(__it.ptr) {}
 
-                bst_node<_Ttp> * operator*()
+                bst_node * operator*()
                 {
                     return *_ptr;
                 }
 
-                bst_node<_Ttp> * operator->()
+                bst_node * operator->()
                 {
                     return _ptr;
                 }
@@ -70,8 +68,8 @@ namespace fsa
         public:
             typedef T                value_type;
             typedef T &              reference;
-            typedef bst_node<T>      node_type;
-            typedef bst_iterator<T>  iterator;
+            typedef bst_node      node_type;
+            typedef bst_iterator  iterator;
             typedef unsigned int       size_type;
 
         private:
