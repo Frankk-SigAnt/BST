@@ -25,10 +25,9 @@ namespace fsa
                 bst_node * _ptr;
 
                 bst_iterator(bst_node * _Ptr_ = 0): _ptr(_Ptr_) {}
-
                 bst_iterator(bst_iterator & __it): _ptr(__it.ptr) {}
 
-                bst_node * operator*()
+                bst_node & operator*()
                 {
                     return *_ptr;
                 }
@@ -46,9 +45,9 @@ namespace fsa
 
                 bst_iterator operator++(int)
                 {
-                    bst_iterator _tmp_it = *this;
+                    bst_iterator tmp_It = *this;
                     *(this)++;
-                    return _tmp_it;
+                    return tmp_It;
                 }
 
                 bst_iterator & operator--()
@@ -59,18 +58,28 @@ namespace fsa
 
                 bst_iterator operator--(int)
                 {
-                    bst_iterator _tmp_it = *this;
+                    bst_iterator tmp_It = *this;
                     *(this)--;
-                    return _tmp_it;
+                    return tmp_It;
+                }
+
+                bool operator==(bst_iterator & It)
+                {
+                    return _ptr == It._ptr;
+                }
+
+                bool operator!=(bst_iterator & It)
+                {
+                    return _ptr != It._ptr;
                 }
             };
 
         public:
-            typedef T                value_type;
-            typedef T &              reference;
+            typedef T             value_type;
+            typedef T &           reference;
             typedef bst_node      node_type;
             typedef bst_iterator  iterator;
-            typedef unsigned int       size_type;
+            typedef unsigned int  size_type;
 
         private:
             iterator _root;
