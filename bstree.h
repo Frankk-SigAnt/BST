@@ -39,7 +39,7 @@ namespace fsa
 
                 bst_iterator & operator++()
                 {
-                    // increment unfinished
+                    //TODO: increment unfinished
                     return *this;
                 }
 
@@ -52,7 +52,7 @@ namespace fsa
 
                 bst_iterator & operator--()
                 {
-                    // decrement unfinished
+                    //TODO: decrement unfinished
                     return *this;
                 }
 
@@ -157,4 +157,4 @@ namespace fsa
 
 }
 
-#endif
+#endif //BSTREE_H_
