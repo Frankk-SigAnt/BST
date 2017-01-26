@@ -24,12 +24,12 @@ namespace fsa
             {
                 bst_node * _ptr;
 
-                bst_iterator(bst_node * _Ptr_ = 0): _ptr(_Ptr_) {}
-                bst_iterator(bst_iterator & __it): _ptr(__it.ptr) {}
+                bst_iterator(bst_node * _Ptr = 0): _ptr(_Ptr) {}
+                bst_iterator(bst_iterator & _it): _ptr(_it.ptr) {}
 
-                bst_node & operator*()
+                T & operator*()
                 {
-                    return *_ptr;
+                    return *_ptr->data;
                 }
 
                 bst_node * operator->()
@@ -45,9 +45,9 @@ namespace fsa
 
                 bst_iterator operator++(int)
                 {
-                    bst_iterator tmp_It = *this;
+                    bst_iterator tmp_iter = *this;
                     *(this)++;
-                    return tmp_It;
+                    return tmp_iter;
                 }
 
                 bst_iterator & operator--()
@@ -58,19 +58,19 @@ namespace fsa
 
                 bst_iterator operator--(int)
                 {
-                    bst_iterator tmp_It = *this;
+                    bst_iterator tmp_iter = *this;
                     *(this)--;
-                    return tmp_It;
+                    return tmp_iter;
                 }
 
-                bool operator==(bst_iterator & It)
+                bool operator==(bst_iterator & _it)
                 {
-                    return _ptr == It._ptr;
+                    return _ptr == _it._ptr;
                 }
 
-                bool operator!=(bst_iterator & It)
+                bool operator!=(bst_iterator & _it)
                 {
-                    return _ptr != It._ptr;
+                    return _ptr != _it._ptr;
                 }
             };
 
@@ -82,30 +82,32 @@ namespace fsa
             typedef unsigned int  size_type;
 
         private:
-            iterator _root;
+            iterator _header;
             size_type _size;
-            bool isempty;
 
         protected:
-            void destroy_node(iterator _rm_iter);
+            void destroy_node(node_type * _rm_ptr);
             iterator left_rotate(iterator _pos);
             iterator right_rotate(iterator _pos);
 
         public:
             //Con-/De-structors and operator=
-            bstree(): _root(0), _size(0), isempty(true) {}
-            explicit bstree(value_type & _val): _size(1), isempty(false) {_root = new node_type(_val);}
+            bstree(): _header(0), _size(0) {}
+            explicit bstree(value_type & _val): _header(0), _size(1)
+            {
+                _header->father = new node_type(_val, _header._ptr);
+                _header->left = _header->right = _header->father;
+            }
             virtual ~bstree();
             bstree & operator=(bstree & _opr);
 
             //Capasity and element access
-            iterator root() {return _root;}
             size_type size() const {return _size;}
-            bool empty() const {return isempty;}
-            iterator begin();
-            iterator end();
-            reference front() const {return *(begin());}
-            reference back() const {return *(end());}
+            bool empty() const {return (_header->father == 0);}
+            iterator begin() {return iterator(_header->right);}
+            iterator end() {return _header;} 
+            reference front() const {return *(_header->right->data);}
+            reference back() const {return *(_header->left->data);}
             iterator search(reference _val);
 
             //Modifiers
@@ -117,42 +119,25 @@ namespace fsa
     };
 
     template<class T>
-    void bstree<T>::destroy_node(bstree<T>::iterator _rm_iter)
+    void bstree<T>::destroy_node(bstree<T>::node_type * _rm_ptr)
     {
-        if(_rm_iter == 0) return;
-        destroy_node(_rm_iter->left);
-        destroy_node(_rm_iter->right);
-        delete _rm_iter;
+        if(_rm_ptr == 0) return;
+        destroy_node(_rm_ptr->left);
+        destroy_node(_rm_ptr->right);
+        delete _rm_ptr;
     }
 
     template<class T>
     bstree<T>::~bstree()
     {
-        destroy_node(_root);
+        destroy_node(_header->father);
     }
 
     template<class T>
     bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
     {
-        this->_root = _opr._root;
+        this->_header = _opr._header;
         _size = _opr._size;
-        isempty = _opr.isempty;
-    }
-
-    template<class T>
-    typename bstree<T>::iterator bstree<T>::begin()
-    {
-        iterator _iter = _root;
-        while(_iter->left != 0) _iter = _iter->left;
-        return _iter;
-    }
-
-    template<class T>
-    typename bstree<T>::iterator bstree<T>::end()
-    {
-        iterator _iter = _root;
-        while(_iter->right != 0) _iter = _iter->right;
-        return _iter;
     }
 
 }
