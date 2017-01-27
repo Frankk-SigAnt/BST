@@ -3,6 +3,7 @@
 
 #include<cstdlib>
 #include<algorithm>
+#include<memory>
 
 namespace fsa
 {
@@ -14,10 +15,11 @@ namespace fsa
             {
                 T data;
                 bst_node * father;
-                bst_node * left, right;
+                //bst_node * left, right;
+                std::unique_ptr<bst_node> left, right;
 
-                bst_node(): data(T()), father(0), left(0), right(0) {}
-                bst_node(T & _val, bst_node * _pf = 0): data(_val), father(_pf), left(0), right(0) {}
+                bst_node() {}
+                bst_node(T & _val, bst_node * _pf = nullptr): data(_val), father(_pf) {}
             };
 
             struct bst_iterator
@@ -117,11 +119,10 @@ namespace fsa
             typedef unsigned int  size_type;
 
         private:
-            pointer _header;
+            std::unique_ptr<node_type> _header;
             size_type _size;
 
         protected:
-            void destroy_node(pointer _rm_ptr);
             iterator left_rotate(iterator _pos);
             iterator right_rotate(iterator _pos);
 
@@ -152,21 +153,6 @@ namespace fsa
             void swap(bstree & _opr);
             void splice(bstree & _opr);
     };
-
-    template<class T>
-    void bstree<T>::destroy_node(bstree<T>::pointer _rm_ptr)
-    {
-        if(_rm_ptr == 0) return;
-        destroy_node(_rm_ptr->left);
-        destroy_node(_rm_ptr->right);
-        delete _rm_ptr;
-    }
-
-    template<class T>
-    bstree<T>::~bstree()
-    {
-        destroy_node(_header->father);
-    }
 
     template<class T>
     bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
