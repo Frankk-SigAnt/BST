@@ -130,7 +130,7 @@ namespace fsa
             bstree(): _header(0), _size(0) {}
             explicit bstree(value_type & _val): _header(0), _size(1)
             {
-                _header->father = new node_type(_val, _header._ptr);
+                _header->father = new node_type(_val, _header->_ptr);
                 _header->left = _header->right = _header->father;
             }
             virtual ~bstree();
