@@ -123,27 +123,28 @@ namespace fsa
         size_type _size;
 
     protected:
-        iterator left_rotate(iterator _pos);
-        iterator right_rotate(iterator _pos);
+        pointer _root() { return _header->father; }
+        pointer _left_most() { return _header->right; }
+        pointer _right_most() { return _header->left; }
 
     public:
         //Con-/De-structors and operator=
         bstree() : _header(0), _size(0) {}
         explicit bstree(value_type & _val) : _header(0), _size(1)
         {
-            _header->father = new node_type(_val, _header->_ptr);
-            _header->left = _header->right = _header->father;
+            _root() = new node_type(_val, _header->_ptr);
+            _left_most() = _header->right = _root();
         }
         virtual ~bstree();
         bstree & operator=(bstree & _opr);
 
         //Capasity and element access
         size_type size() const { return _size; }
-        bool empty() const { return (_header->father == 0); }
-        iterator begin() { return iterator(_header->right); }
+        bool empty() const { return (_root() == 0); }
+        iterator begin() { return iterator(_left_most()); }
         iterator end() { return iterator(_header); }
-        reference front() const { return _header->right->data; }
-        reference back() const { return _header->left->data; }
+        reference front() const { return _left_most()->data; }
+        reference back() const { return _right_most()->data; }
         iterator find(reference _val);
 
         //Modifiers
@@ -163,7 +164,7 @@ namespace fsa
     template<class T>
     typename bstree<T>::iterator bstree<T>::find(bstree<T>::reference _val)
     {
-        pointer _ptr = _header->father;
+        pointer _ptr = _root();
 
         while (_ptr != 0)
         {
