@@ -1,4 +1,4 @@
 OBJ=bstree.h
 
 bsttree.o: $(OBJ)
-	g++ $^ -o $@
+	g++ $^ -o $@ --std=c++17
