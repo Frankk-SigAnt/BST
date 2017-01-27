@@ -39,7 +39,24 @@ namespace fsa
 
                 bst_iterator & operator++()
                 {
-                    //TODO: increment unfinished
+                    if((*this)->right != 0)
+                    {
+                        this->ptr = (*this)->right;
+                        while((*this)->left != 0)
+                        {
+                            this->ptr = (*this)->left;
+                        }
+                    }
+                    else
+                    {
+                        bst_node * prev = this->ptr;
+                        this->ptr = (*this)->father;
+                        while(prev == (*this)->right)
+                        {
+                            prev = this->ptr;
+                            this->ptr = (*this)->father;
+                        }
+                    }
                     return *this;
                 }
 
@@ -52,7 +69,24 @@ namespace fsa
 
                 bst_iterator & operator--()
                 {
-                    //TODO: decrement unfinished
+                    if((*this)->left != 0)
+                    {
+                        this->ptr = (*this)->left;
+                        while((*this)->right != 0)
+                        {
+                            this->ptr = (*this)->right;
+                        }
+                    }
+                    else
+                    {
+                        bst_node * prev = this->ptr;
+                        this->ptr = (*this)->father;
+                        while(prev == (*this)->left)
+                        {
+                            prev = this->ptr;
+                            this->ptr = (*this)->father;
+                        }
+                    }
                     return *this;
                 }
 
@@ -78,15 +112,16 @@ namespace fsa
             typedef T             value_type;
             typedef T &           reference;
             typedef bst_node      node_type;
+            typedef bst_node *    pointer;
             typedef bst_iterator  iterator;
             typedef unsigned int  size_type;
 
         private:
-            iterator _header;
+            pointer _header;
             size_type _size;
 
         protected:
-            void destroy_node(node_type * _rm_ptr);
+            void destroy_node(pointer _rm_ptr);
             iterator left_rotate(iterator _pos);
             iterator right_rotate(iterator _pos);
 
@@ -105,9 +140,9 @@ namespace fsa
             size_type size() const {return _size;}
             bool empty() const {return (_header->father == 0);}
             iterator begin() {return iterator(_header->right);}
-            iterator end() {return _header;} 
-            reference front() const {return *(_header->right->data);}
-            reference back() const {return *(_header->left->data);}
+            iterator end() {return iterator(_header);} 
+            reference front() const {return _header->right->data;}
+            reference back() const {return _header->left->data;}
             iterator search(reference _val);
 
             //Modifiers
@@ -119,7 +154,7 @@ namespace fsa
     };
 
     template<class T>
-    void bstree<T>::destroy_node(bstree<T>::node_type * _rm_ptr)
+    void bstree<T>::destroy_node(bstree<T>::pointer _rm_ptr)
     {
         if(_rm_ptr == 0) return;
         destroy_node(_rm_ptr->left);
@@ -136,8 +171,7 @@ namespace fsa
     template<class T>
     bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
     {
-        this->_header = _opr._header;
-        _size = _opr._size;
+        //TODO
     }
 
 }
