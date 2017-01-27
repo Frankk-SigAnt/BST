@@ -143,7 +143,7 @@ namespace fsa
             iterator end() {return iterator(_header);} 
             reference front() const {return _header->right->data;}
             reference back() const {return _header->left->data;}
-            iterator search(reference _val);
+            iterator find(reference _val);
 
             //Modifiers
             void insert(reference _val);
@@ -172,6 +172,35 @@ namespace fsa
     bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
     {
         //TODO
+    }
+
+    template<class T>
+    typename bstree<T>::iterator bstree<T>::find(bstree<T>::reference _val)
+    {
+        pointer _ptr = _header->father;
+
+        while(_ptr != 0)
+        {
+            if(_val == _ptr->data)
+            {
+                break;
+            }
+            else
+            {
+                _ptr = (_val < _ptr->data) 
+                    ? _ptr->left
+                    : _ptr->right;
+            }
+        }
+
+        if(_ptr == 0)
+        {
+            return end();
+        }
+        else
+        {
+            return iterator(_ptr);
+        }
     }
 
 }
