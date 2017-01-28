@@ -3,3 +3,6 @@
 
 # VIM files
 *.un~
+
+# ctags generated files
+tags
