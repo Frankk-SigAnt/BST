@@ -149,8 +149,8 @@ namespace fsa
 
     public:
         //Con-/De-structors and operator=
-        bstree() : _header(nullptr), _size(0) {}
-        explicit bstree(value_type & _val) : _header(nullptr), _size(1)
+        bstree() : _header_ptr(nullptr), _size(0) {}
+        explicit bstree(value_type & _val) : _header_ptr(nullptr), _size(1)
         {
             _root() = new node_type(_val, _header_ptr->_ptr);
             _left_most() = _header_ptr->right = _root();
@@ -161,7 +161,7 @@ namespace fsa
 
         //Capasity and element access
         size_type size() const { return _size; }
-        bool empty() const { return (_root() == 0); }
+        bool empty() const { return (_root() == nullptr); }
         iterator begin() { return iterator(_left_most()); }
         iterator end() { return iterator(_header_ptr); }
         reference front() const { return _left_most()->data; }
@@ -194,7 +194,9 @@ namespace fsa
         {
             clear();
             if(!_opr.empty())
+            {
                 *_root() = new node_type(_opr._root(), _header_ptr);
+            }
         }
         return *this;
     }
@@ -231,14 +233,14 @@ namespace fsa
     template<class T>
     void bstree<T>::insert(bstree<T>::reference _val)
     {
-        if (_header == nullptr)
+        if (_header_ptr == nullptr)
         {
-            _header->father = new node_type(val, _header);
-            _header->left = _header->right = _header->father;
+            _header_ptr->father = new node_type(_val, _header_ptr);
+            _header_ptr->left = _header_ptr->right = _header_ptr->father;
         }
         else
         {
-            pointer _ptr = _header->father;
+            pointer _ptr = _header_ptr->father;
             pointer _prev = _ptr;
 
             while (_ptr != nullptr)
@@ -265,13 +267,13 @@ namespace fsa
                 _prev->right = new node_type(_val, _prev);
             }
 
-            if (_header->left->left != nullptr)
+            if (_header_ptr->left->left != nullptr)
             {
-                _header->left = _header->left->left;
+                _header_ptr->left = _header_ptr->left->left;
             }
-            if (_header->right->right != nullptr)
+            if (_header_ptr->right->right != nullptr)
             {
-                _header->right = _header->right->right;
+                _header_ptr->right = _header_ptr->right->right;
             }
         }
     }
