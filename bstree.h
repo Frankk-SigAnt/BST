@@ -1,8 +1,7 @@
 #ifndef BSTREE_H_
 #define BSTREE_H_
 
-#include<cstdlib>
-#include<algorithm>
+#include <utility>
 
 namespace fsa
 {
@@ -17,8 +16,26 @@ namespace fsa
             bst_node * left, right;
 
             bst_node() {}
+
+            // Copy constructor. Copy the whole subtree, leave father with null.
+            bst_node(const bst_node & other, const bst_node * pf = nullptr) : data(other.data), father(pf)
+            {
+                if(other.left) { left = new bst_node(*other.left, this); }
+                if(other.right) { right = new bst_node(*other.right, this); }
+            }
+
+            // Move constructor. Move the whole subtree.
+            bst_node(bst_node&& other, const bst_node * pf = nullptr)
+                : data(std::move(other.data)), father(pf),
+                  left(other.left), right(other.right)
+            {
+                left.father = right.father = this;
+                // clear moved value
+                other.left = other.right = nullptr;
+            }
+
             bst_node(T & _val, bst_node * _pf = nullptr) : data(_val), father(_pf) {}
-            ~bstree()
+            ~bst_node()
             {
                 delete left;
                 delete right;
@@ -139,7 +156,8 @@ namespace fsa
             _left_most() = _header_ptr->right = _root();
         }
         virtual ~bstree();
-        bstree & operator=(bstree & _opr);
+        bstree & operator=(const bstree & _opr);
+        bstree & operator=(bstree&& _opr);
 
         //Capasity and element access
         size_type size() const { return _size; }
@@ -151,6 +169,7 @@ namespace fsa
         iterator find(reference _val);
 
         //Modifiers
+        void clear();
         void insert(reference _val);
         void erase(iterator _pos);
         void remove(reference _val);
@@ -161,17 +180,22 @@ namespace fsa
     template<class T>
     inline bstree<T>::~bstree()
     {
-        delete _root();
+        clear();
         // reset hanging pointer
         _header_ptr->left = _header_ptr->right = nullptr;
         delete _header_ptr;
     }
 
     template<class T>
-    bstree<T> & bstree<T>::operator=(bstree<T> & _opr)
+    bstree<T> & bstree<T>::operator=(const bstree<T> & _opr)
     {
-        //_root() = _opr._root()
-        //_root() = new 
+        // we do this only if they are not the same
+        if(this != &_opr)
+        {
+            clear();
+            if(!_opr.empty())
+                *_root() = new node_type(_opr._root(), _header_ptr);
+        }
         return *this;
     }
 
