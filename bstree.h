@@ -26,7 +26,7 @@ namespace fsa
         {
             bst_node * _ptr;
 
-            bst_iterator(bst_node * _Ptr = 0) : _ptr(_Ptr) {}
+            bst_iterator(bst_node * _Ptr = nullptr) : _ptr(_Ptr) {}
             bst_iterator(bst_iterator & _it) : _ptr(_it.ptr) {}
 
             T & operator*()
@@ -41,10 +41,10 @@ namespace fsa
 
             bst_iterator & operator++()
             {
-                if ((*this)->right != 0)
+                if ((*this)->right != nullptr)
                 {
                     this->ptr = (*this)->right;
-                    while ((*this)->left != 0)
+                    while ((*this)->left != nullptr)
                     {
                         this->ptr = (*this)->left;
                     }
@@ -71,10 +71,10 @@ namespace fsa
 
             bst_iterator & operator--()
             {
-                if ((*this)->left != 0)
+                if ((*this)->left != nullptr)
                 {
                     this->ptr = (*this)->left;
-                    while ((*this)->right != 0)
+                    while ((*this)->right != nullptr)
                     {
                         this->ptr = (*this)->right;
                     }
@@ -128,8 +128,8 @@ namespace fsa
 
     public:
         //Con-/De-structors and operator=
-        bstree() : _header(0), _size(0) {}
-        explicit bstree(value_type & _val) : _header(0), _size(1)
+        bstree() : _header(nullptr), _size(0) {}
+        explicit bstree(value_type & _val) : _header(nullptr), _size(1)
         {
             _header->father = new node_type(_val, _header->_ptr);
             _header->left = _header->right = _header->father;
@@ -139,7 +139,7 @@ namespace fsa
 
         //Capasity and element access
         size_type size() const { return _size; }
-        bool empty() const { return (_header->father == 0); }
+        bool empty() const { return (_header->father == nullptr); }
         iterator begin() { return iterator(_header->right); }
         iterator end() { return iterator(_header); }
         reference front() const { return _header->right->data; }
@@ -165,7 +165,7 @@ namespace fsa
     {
         pointer _ptr = _header->father;
 
-        while (_ptr != 0)
+        while (_ptr != nullptr)
         {
             if (_val == _ptr->data)
             {
@@ -179,13 +179,61 @@ namespace fsa
             }
         }
 
-        if (_ptr == 0)
+        if (_ptr == nullptr)
         {
             return end();
         }
         else
         {
             return iterator(_ptr);
+        }
+    }
+
+    template<class T>
+    void bstree<T>::insert(bstree<T>::reference _val)
+    {
+        if (_header == nullptr)
+        {
+            _header->father = new node_type(val, _header);
+            _header->left = _header->right = _header->father;
+        }
+        else
+        {
+            pointer _ptr = _header->father;
+            pointer _prev = _ptr;
+
+            while (_ptr != nullptr)
+            {
+                if (_val == _ptr->data)
+                {
+                    return;
+                }
+                else
+                {
+                    _prev = _ptr;
+                    _ptr = (_val < _ptr->data)
+                        ? _ptr->left
+                        : _ptr->right;
+                }
+            }
+
+            if (_val < _prev->data)
+            {
+                _prev->left = new node_type(_val, _prev);
+            }
+            else
+            {
+                _prev->right = new node_type(_val, _prev);
+            }
+
+            if (_header->left->left != nullptr)
+            {
+                _header->left = _header->left->left;
+            }
+            if (_header->right->right != nullptr)
+            {
+                _header->right = _header->right->right;
+            }
         }
     }
 
