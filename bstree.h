@@ -132,13 +132,8 @@ namespace fsa
 
     public:
         //Con-/De-structors and operator=
-<<<<<<< HEAD
         bstree() : _header(nullptr), _size(0) {}
         explicit bstree(value_type & _val) : _header(nullptr), _size(1)
-=======
-        bstree() : _header_ptr(0), _size(0) {}
-        explicit bstree(value_type & _val) : _header_ptr(0), _size(1)
->>>>>>> origin/master
         {
             _root() = new node_type(_val, _header_ptr->_ptr);
             _left_most() = _header_ptr->right = _root();
@@ -148,19 +143,11 @@ namespace fsa
 
         //Capasity and element access
         size_type size() const { return _size; }
-<<<<<<< HEAD
-        bool empty() const { return (_header->father == nullptr); }
-        iterator begin() { return iterator(_header->right); }
-        iterator end() { return iterator(_header); }
-        reference front() const { return _header->right->data; }
-        reference back() const { return _header->left->data; }
-=======
         bool empty() const { return (_root() == 0); }
         iterator begin() { return iterator(_left_most()); }
         iterator end() { return iterator(_header_ptr); }
         reference front() const { return _left_most()->data; }
         reference back() const { return _right_most()->data; }
->>>>>>> origin/master
         iterator find(reference _val);
 
         //Modifiers
