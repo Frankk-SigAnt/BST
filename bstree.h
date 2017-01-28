@@ -178,6 +178,16 @@ namespace fsa
     };
 
     template<class T>
+    inline void clear()
+    {
+        if (!empty())
+        {
+            delete _root();
+            _root() = _header_ptr;
+        }
+    }
+
+    template<class T>
     inline bstree<T>::~bstree()
     {
         clear();
