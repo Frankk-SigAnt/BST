@@ -29,7 +29,7 @@ namespace fsa
                 : data(std::move(other.data)), father(pf),
                   left(other.left), right(other.right)
             {
-                left.father = right.father = this;
+                left->father = right->father = this;
                 // clear moved value
                 other.left = other.right = nullptr;
             }
