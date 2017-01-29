@@ -13,7 +13,7 @@ namespace fsa
         {
             T data;
             bst_node * father;
-            bst_node * left, right;
+            bst_node *left, *right;
 
             bst_node() {}
 
