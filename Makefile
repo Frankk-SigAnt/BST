@@ -1,17 +1,21 @@
 .PHONY: all clear test build_test
 
-all: bsttree.o
+LIB=bstree
+TEST=test_case
 
-OBJ=bstree.h
-
-bsttree.o: $(OBJ)
-	g++ $^ -o $@ --std=c++11
+lib: $(LIB).o
 
 clear: 
 	rm *.o
 
-test: build_test
+test: $(TEST).o
 	./test_case.o
 
-build_test: test_case.cpp
-	g++ test_case.cpp -o test_case.o -std=c++1y -lboost_unit_test_framework
+build_test: $(TEST).o
+	
+$(LIB).o: $(LIB)
+	g++ $^ -o $@ --std=c++1y
+
+# We use the Boost Unit Test Framework
+$(TEST).o: $(TEST).cpp
+	g++ $^ -o $@ -std=c++1y -lboost_unit_test_framework
