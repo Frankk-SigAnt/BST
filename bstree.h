@@ -18,7 +18,7 @@ namespace fsa
             bst_node() {}
 
             // Copy constructor. Copy the whole subtree, leave father with null.
-            bst_node(const bst_node & other, const bst_node * pf = nullptr) : data(other.data), father(pf)
+            bst_node(const bst_node & other, bst_node * const pf = nullptr) : data(other.data), father(pf)
             {
                 if(other.left) { left = new bst_node(*other.left, this); }
                 if(other.right) { right = new bst_node(*other.right, this); }
@@ -34,7 +34,7 @@ namespace fsa
                 other.left = other.right = nullptr;
             }
 
-            bst_node(T & _val, bst_node * _pf = nullptr) : data(_val), father(_pf) {}
+            bst_node(T _val, bst_node * _pf = nullptr) : data(_val), father(_pf) {}
             ~bst_node()
             {
                 delete left;
@@ -47,7 +47,7 @@ namespace fsa
             bst_node * _ptr;
 
             bst_iterator(bst_node * _Ptr = nullptr) : _ptr(_Ptr) {}
-            bst_iterator(bst_iterator & _it) : _ptr(_it.ptr) {}
+            bst_iterator(const bst_iterator & _it) : _ptr(_it._ptr) {}
 
             T & operator*()
             {
@@ -149,12 +149,15 @@ namespace fsa
 
     public:
         //Con-/De-structors and operator=
-        bstree() : _header_ptr(nullptr), _size(0) {}
+        bstree() : _header_ptr(new node_type()), _size(0)
+        { _header_ptr->father = _header_ptr->left = _header_ptr->right = _header_ptr; }
+
         explicit bstree(value_type & _val) : _header_ptr(nullptr), _size(1)
         {
             _root() = new node_type(_val, _header_ptr->_ptr);
             _left_most() = _header_ptr->right = _root();
         }
+
         virtual ~bstree();
         bstree & operator=(const bstree & _opr);
         bstree & operator=(bstree&& _opr);
@@ -205,7 +208,7 @@ namespace fsa
             clear();
             if(!_opr.empty())
             {
-                *_root() = new node_type(_opr._root(), _header_ptr);
+                _root() = new node_type(*_opr._root(), _header_ptr);
             }
         }
         return *this;
