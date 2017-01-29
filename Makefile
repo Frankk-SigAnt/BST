@@ -14,4 +14,4 @@ test: build_test
 	./test_case.o
 
 build_test: test_case.cpp
-	g++ test_case.cpp -o test_case.o -std=c++17 -lboost_unit_test_framework
+	g++ test_case.cpp -o test_case.o -std=c++1y -lboost_unit_test_framework
