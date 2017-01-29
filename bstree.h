@@ -143,9 +143,9 @@ namespace fsa
         size_type _size;
 
     protected:
-        pointer _root() { return _header_ptr->father; }
-        pointer _left_most() { return _header_ptr->right; }
-        pointer _right_most() { return _header_ptr->left; }
+        pointer & _root() const { return _header_ptr->father; }
+        pointer & _left_most() { return _header_ptr->right; }
+        pointer &  _right_most() { return _header_ptr->left; }
 
     public:
         //Con-/De-structors and operator=
@@ -161,7 +161,7 @@ namespace fsa
 
         //Capasity and element access
         size_type size() const { return _size; }
-        bool empty() const { return (_root() == nullptr); }
+        bool empty() const { return (_root() == _header_ptr); }
         iterator begin() { return iterator(_left_most()); }
         iterator end() { return iterator(_header_ptr); }
         reference front() const { return _left_most()->data; }
@@ -178,7 +178,7 @@ namespace fsa
     };
 
     template<class T>
-    inline void clear()
+    inline void bstree<T>::clear()
     {
         if (!empty())
         {
