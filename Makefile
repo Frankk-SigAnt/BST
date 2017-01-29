@@ -1,4 +1,4 @@
-.PHONY: all clear test build_test
+.PHONY: lib clear test build_test
 
 LIB=bstree
 TEST=test_case
@@ -18,4 +18,4 @@ $(LIB).o: $(LIB)
 
 # We use the Boost Unit Test Framework
 $(TEST).o: $(TEST).cpp
-	g++ $^ -o $@ -std=c++1y -lboost_unit_test_framework
+	g++ $^ -o $@ -std=c++1y -lboost_unit_test_framework -g3
