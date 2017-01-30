@@ -30,7 +30,7 @@ namespace fsa
                   left(other.left), right(other.right)
             {
                 left->father = right->father = this;
-                // clear moved value
+                // Clear moved value.
                 other.left = other.right = nullptr;
             }
 
@@ -61,6 +61,7 @@ namespace fsa
 
             bst_iterator & operator++()
             {
+                // If `right` is not empty, find the smallest node in the subtree.
                 if ((*this)->right != nullptr)
                 {
                     this->ptr = (*this)->right;
@@ -71,6 +72,7 @@ namespace fsa
                 }
                 else
                 {
+                    // Find the first `ancestor` which is not smaller than `this`.
                     bst_node * prev = this->ptr;
                     this->ptr = (*this)->father;
                     while (prev == (*this)->right)
@@ -91,6 +93,7 @@ namespace fsa
 
             bst_iterator & operator--()
             {
+                // If `left` is not empty, find the largest node in the subtree.
                 if ((*this)->left != nullptr)
                 {
                     this->ptr = (*this)->left;
@@ -101,6 +104,7 @@ namespace fsa
                 }
                 else
                 {
+                    // Find the first `ancestor` which is not greater than `this`.
                     bst_node * prev = this->ptr;
                     this->ptr = (*this)->father;
                     while (prev == (*this)->left)
@@ -132,7 +136,7 @@ namespace fsa
 
     public:
         typedef T             value_type;
-        typedef T &           reference;
+        typedef T &&          reference;
         typedef bst_node      node_type;
         typedef bst_node *    pointer;
         typedef bst_iterator  iterator;
@@ -148,7 +152,7 @@ namespace fsa
         pointer &  _right_most() { return _header_ptr->left; }
 
     public:
-        //Con-/De-structors and operator=
+        // Con-/De-structors and `operator=`.
         bstree() : _header_ptr(new node_type()), _size(0)
         { _header_ptr->father = _header_ptr->left = _header_ptr->right = _header_ptr; }
 
@@ -162,7 +166,7 @@ namespace fsa
         bstree & operator=(const bstree & _opr);
         bstree & operator=(bstree&& _opr);
 
-        //Capasity and element access
+        // Capasity and element access.
         size_type size() const { return _size; }
         bool empty() const { return (_root() == _header_ptr); }
         iterator begin() { return iterator(_left_most()); }
@@ -171,7 +175,7 @@ namespace fsa
         reference back() const { return _right_most()->data; }
         iterator find(reference _val);
 
-        //Modifiers
+        // Modifiers.
         void clear();
         void insert(reference _val);
         void erase(iterator _pos);
@@ -194,7 +198,7 @@ namespace fsa
     inline bstree<T>::~bstree()
     {
         clear();
-        // reset hanging pointer
+        // Reset hanging pointer.
         _header_ptr->left = _header_ptr->right = nullptr;
         delete _header_ptr;
     }
@@ -202,7 +206,7 @@ namespace fsa
     template<class T>
     bstree<T> & bstree<T>::operator=(const bstree<T> & _opr)
     {
-        // we do this only if they are not the same
+        // We do this only if they are not the same.
         if(this != &_opr)
         {
             clear();
@@ -221,7 +225,7 @@ namespace fsa
 
         while (_ptr != nullptr)
         {
-            if (_val == _ptr->data)
+            if (_val == _ptr->data) // Value _val found, break.
             {
                 break;
             }
@@ -233,7 +237,7 @@ namespace fsa
             }
         }
 
-        if (_ptr == nullptr)
+        if (_ptr == nullptr) // If value _val is not found, return end().
         {
             return end();
         }
@@ -246,8 +250,9 @@ namespace fsa
     template<class T>
     void bstree<T>::insert(bstree<T>::reference _val)
     {
-        if (_header_ptr == nullptr)
+        if (empty())
         {
+            // Create the first node, i.e. root.
             _header_ptr->father = new node_type(_val, _header_ptr);
             _header_ptr->left = _header_ptr->right = _header_ptr->father;
         }
@@ -256,9 +261,9 @@ namespace fsa
             pointer _ptr = _header_ptr->father;
             pointer _prev = _ptr;
 
-            while (_ptr != nullptr)
+            while (_ptr != nullptr) // Search for value _val.
             {
-                if (_val == _ptr->data)
+                if (_val == _ptr->data) // If the value already exists, do nothing.
                 {
                     return;
                 }
@@ -271,6 +276,7 @@ namespace fsa
                 }
             }
 
+            // Create new node.
             if (_val < _prev->data)
             {
                 _prev->left = new node_type(_val, _prev);
@@ -280,6 +286,7 @@ namespace fsa
                 _prev->right = new node_type(_val, _prev);
             }
 
+            // Adjust `left_most` and `right_most`.
             if (_header_ptr->left->left != nullptr)
             {
                 _header_ptr->left = _header_ptr->left->left;
@@ -293,4 +300,4 @@ namespace fsa
 
 }
 
-#endif //BSTREE_H_
+#endif // BSTREE_H_

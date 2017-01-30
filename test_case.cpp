@@ -16,8 +16,8 @@ BOOST_AUTO_TEST_CASE(it_works)
     tree_a.begin(), tree_a.end();
     
     //// `insert(T)`
-    //tree_a.insert(666);
-    //string_tree.insert("666");
+    tree_a.insert(666);
+    string_tree.insert("666");
 
     // If it enters here, this test passes
     BOOST_CHECK(true);
