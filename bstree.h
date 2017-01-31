@@ -136,7 +136,7 @@ namespace fsa
 
     public:
         typedef T             value_type;
-        typedef T &&          reference;
+        typedef T &           reference;
         typedef bst_node      node_type;
         typedef bst_node *    pointer;
         typedef bst_iterator  iterator;
@@ -173,13 +173,13 @@ namespace fsa
         iterator end() { return iterator(_header_ptr); }
         reference front() const { return _left_most()->data; }
         reference back() const { return _right_most()->data; }
-        iterator find(reference _val);
+        iterator find(const value_type & _val);
 
         // Modifiers.
         void clear();
-        void insert(reference _val);
+        void insert(const value_type & _val);
         void erase(iterator _pos);
-        void remove(reference _val);
+        void remove(value_type & _val);
         void swap(bstree & _opr);
         void splice(bstree & _opr);
     };
@@ -220,7 +220,7 @@ namespace fsa
     }
 
     template<class T>
-    typename bstree<T>::iterator bstree<T>::find(bstree<T>::reference _val)
+    typename bstree<T>::iterator bstree<T>::find(const bstree<T>::value_type & _val)
     {
         pointer _ptr = _root();
 
@@ -249,7 +249,7 @@ namespace fsa
     }
 
     template<class T>
-    void bstree<T>::insert(bstree<T>::reference _val)
+    void bstree<T>::insert(const bstree<T>::value_type & _val)
     {
         if (empty())
         {
