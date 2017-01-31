@@ -12,19 +12,37 @@ BOOST_AUTO_TEST_CASE(it_works)
     // `operator=(const bstree&)`
     tree_a = tree_b;
 
+    // `clear()`
+    tree_a.clear();
+    string_tree.clear();
+
     // iterators
     tree_a.begin(), tree_a.end();
     
-    //// `insert(T)`
+    // `insert(T)`
     tree_a.insert(666);
     string_tree.insert("666");
+
+    tree_a.find(666);
 
     // If it enters here, this test passes
     BOOST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(empty_work_expectly)
+BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
 {
+    // Defualt constructs empty
     fsa::bstree<int> tree_a;
     BOOST_CHECK(tree_a.empty());
+    BOOST_CHECK_EQUAL(tree_a.size(), 0);
+
+    // Not empty after insert
+    tree_a.insert(666);
+    BOOST_CHECK(!tree_a.empty());
+    BOOST_CHECK_EQUAL(tree_a.size(), 1);
+
+    // Empty after cleared
+    tree_a.clear();
+    BOOST_CHECK(tree_a.empty());
+    BOOST_CHECK_EQUAL(tree_a.size(), 0);
 }
