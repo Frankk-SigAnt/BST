@@ -46,3 +46,24 @@ BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
     BOOST_CHECK(tree_a.empty());
     BOOST_CHECK_EQUAL(tree_a.size(), 0);
 }
+
+BOOST_AUTO_TEST_CASE(insert_work_expectly)
+{
+    fsa::bstree<int> tree_a;
+    tree_a.insert(1);
+    tree_a.insert(1);
+
+    // Same element is ignored
+    BOOST_CHECK(!tree_a.empty());
+    BOOST_CHECK_EQUAL(tree_a.size(), 1);
+
+    tree_a.insert(122);
+    BOOST_CHECK_EQUAL(tree_a.size(), 2);
+
+    for (int i = 2; i < 100; i++)
+    {
+        tree_a.insert(i);
+        BOOST_CHECKPOINT("called insert(" << i << ")");
+        BOOST_CHECK_EQUAL(tree_a.size(), i + 1);
+    }
+}
