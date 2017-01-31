@@ -191,6 +191,7 @@ namespace fsa
         {
             delete _root();
             _root() = _header_ptr;
+            _size = 0;
         }
     }
 
@@ -255,6 +256,7 @@ namespace fsa
             // Create the first node, i.e. root.
             _header_ptr->father = new node_type(_val, _header_ptr);
             _header_ptr->left = _header_ptr->right = _header_ptr->father;
+            ++_size;
         }
         else
         {
@@ -286,7 +288,8 @@ namespace fsa
                 _prev->right = new node_type(_val, _prev);
             }
 
-            // Adjust `left_most` and `right_most`.
+            // Adjust size, `left_most` and `right_most`.
+            ++_size;
             if (_header_ptr->left->left != nullptr)
             {
                 _header_ptr->left = _header_ptr->left->left;
