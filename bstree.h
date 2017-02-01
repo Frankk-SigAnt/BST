@@ -190,7 +190,7 @@ namespace fsa
         if (!empty())
         {
             delete _root();
-            _root() = _header_ptr;
+            _root() = _left_most() = _right_most() = _header_ptr;
             _size = 0;
         }
     }
