@@ -9,7 +9,10 @@ clear:
 	rm *.o
 
 test: $(TEST).o
-	./test_case.o
+	./$^
+
+test_with_message: $(TEST).o
+	./$^ --log_level=message
 
 build_test: $(TEST).o
 	
