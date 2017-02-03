@@ -64,6 +64,7 @@ BOOST_AUTO_TEST_CASE(insert_work_expectly)
     {
         tree_a.insert(i);
         BOOST_CHECKPOINT("called insert(" << i << ")");
+        BOOST_CHECK(!tree_a.empty());
         BOOST_CHECK_EQUAL(tree_a.size(), i + 1);
     }
 }

@@ -2,6 +2,7 @@
 #define BSTREE_H_
 
 #include <utility>
+#include <iostream>
 
 namespace fsa
 {
@@ -13,7 +14,7 @@ namespace fsa
         {
             T data;
             bst_node * father;
-            bst_node *left, *right;
+            bst_node *left = nullptr, *right = nullptr;
 
             bst_node() {}
 
@@ -35,10 +36,34 @@ namespace fsa
             }
 
             bst_node(T _val, bst_node * _pf = nullptr) : data(_val), father(_pf) {}
+
             ~bst_node()
             {
                 delete left;
                 delete right;
+            }
+
+            void __dbg_print_node(int level = 0)
+            {
+                for(int i = 0; i < level; ++i)
+                    std::cerr << "  ";
+                std::cerr << this << ": " << data << std::endl;
+                if(left)
+                    left->__dbg_print_node(level + 1);
+                else
+                {
+                    for(int i = 0; i <= level; ++i)
+                        std::cerr << "  ";
+                    std::cerr << "nullptr\n";
+                }
+                if(right)
+                    right->__dbg_print_node(level + 1);
+                else
+                {
+                    for(int i = 0; i <= level; ++i)
+                        std::cerr << "  ";
+                    std::cerr << "nullptr\n";
+                }
             }
         };
 
@@ -147,7 +172,6 @@ namespace fsa
         size_type _size;
 
     protected:
-        pointer & _root() const { return _header_ptr->father; }
         pointer & _left_most() { return _header_ptr->right; }
         pointer &  _right_most() { return _header_ptr->left; }
 
@@ -174,6 +198,7 @@ namespace fsa
         reference front() const { return _left_most()->data; }
         reference back() const { return _right_most()->data; }
         iterator find(const value_type & _val);
+        pointer & _root() const { return _header_ptr->father; }
 
         // Modifiers.
         void clear();
