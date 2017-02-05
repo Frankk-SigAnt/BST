@@ -7,8 +7,8 @@
 BOOST_AUTO_TEST_CASE(it_works)
 {
     // defualt constructor
-    fsa::bstree<int> tree_a, tree_b;
-    fsa::bstree<std::string> string_tree, string_tree_b;
+    fsa::debug_bstree<int> tree_a, tree_b;
+    fsa::debug_bstree<std::string> string_tree, string_tree_b;
     // `operator=(const bstree&)`
     tree_a = tree_b;
 
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(it_works)
 BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
 {
     // Defualt constructs empty
-    fsa::bstree<int> tree_a;
+    fsa::debug_bstree<int> tree_a;
     BOOST_CHECK(tree_a.empty());
     BOOST_CHECK_EQUAL(tree_a.size(), 0);
 
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
 
 BOOST_AUTO_TEST_CASE(insert_work_expectly)
 {
-    fsa::bstree<int> tree_a;
+    fsa::debug_bstree<int> tree_a;
     tree_a.insert(1);
     tree_a.insert(1);
 

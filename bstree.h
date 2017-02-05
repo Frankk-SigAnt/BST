@@ -172,6 +172,7 @@ namespace fsa
         size_type _size;
 
     protected:
+        pointer & _root() const { return _header_ptr->father; }
         pointer & _left_most() { return _header_ptr->right; }
         pointer &  _right_most() { return _header_ptr->left; }
 
@@ -198,7 +199,6 @@ namespace fsa
         reference front() const { return _left_most()->data; }
         reference back() const { return _right_most()->data; }
         iterator find(const value_type & _val);
-        pointer & _root() const { return _header_ptr->father; }
 
         // Modifiers.
         void clear();
@@ -326,6 +326,18 @@ namespace fsa
         }
     }
 
+
+
+    template<class T>
+    class debug_bstree : public bstree<T>
+    {
+        public:
+        using bstree<T>::bst_node;
+        using bstree<T>::bst_iterator;
+        using bstree<T>::_root;
+        using bstree<T>::_left_most;
+        using bstree<T>::_right_most;
+    };
 }
 
 #endif // BSTREE_H_
