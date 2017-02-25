@@ -79,13 +79,13 @@ BOOST_AUTO_TEST_CASE(begin_end_works_expectly)
     fsa::debug_bstree<int> tree_a;
     tree_a.insert(3);
     BOOST_CHECK_EQUAL(*tree_a.begin(), 3);
-    BOOST_CHECK_EQUAL(*tree_a.end(), 3);
+    BOOST_CHECK_EQUAL(*(--tree_a.end()), 3);
     tree_a.insert(27);
     BOOST_CHECK_EQUAL(*tree_a.begin(), 3);
-    BOOST_CHECK_EQUAL(*tree_a.end(), 27);
+    BOOST_CHECK_EQUAL(*(--tree_a.end()), 27);
     tree_a.insert(2);
     BOOST_CHECK_EQUAL(*tree_a.begin(), 2);
-    BOOST_CHECK_EQUAL(*tree_a.end(), 27);
+    BOOST_CHECK_EQUAL(*(--tree_a.end()), 27);
 }
 
 BOOST_AUTO_TEST_CASE(iterators_works_expectly)
