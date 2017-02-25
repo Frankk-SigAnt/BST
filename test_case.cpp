@@ -1,6 +1,11 @@
 #include "bstree.h"
 #define BOOST_TEST_MODULE bstree_test
+#include <iostream>
+#include <vector>
 #include <string>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
 #include <boost/test/included/unit_test.hpp> 
 
 // Just ensure that the functions exeicuted and returned
@@ -66,5 +71,30 @@ BOOST_AUTO_TEST_CASE(insert_work_expectly)
         BOOST_CHECKPOINT("called insert(" << i << ")");
         BOOST_CHECK(!tree_a.empty());
         BOOST_CHECK_EQUAL(tree_a.size(), i + 1);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(iterators_works_expectly)
+{
+    fsa::debug_bstree<int> tree_a;
+    std::vector<int> vect_a;
+
+    std::srand(time(0));
+    std::rand();
+    for (int i = 0; i < 20; i++)
+    {
+        int tmp = std::rand();
+        vect_a.push_back(tmp);
+        tree_a.insert(tmp);
+    }
+    std::sort(vect_a.begin(), vect_a.end());
+
+    std::vector<int>::iterator vect_it = vect_a.begin();
+    fsa::debug_bstree<int>::iterator tree_it = tree_a.begin();
+    for (int i = 0; i < 20; i++)
+    {
+        BOOST_CHECK_EQUAL(*tree_it, *vect_it);
+        tree_it++;
+        vect_it++;
     }
 }

@@ -76,7 +76,7 @@ namespace fsa
 
             T & operator*()
             {
-                return *_ptr->data;
+                return _ptr->data;
             }
 
             bst_node * operator->()
@@ -89,21 +89,21 @@ namespace fsa
                 // If `right` is not empty, find the smallest node in the subtree.
                 if ((*this)->right != nullptr)
                 {
-                    this->ptr = (*this)->right;
+                    this->_ptr = (*this)->right;
                     while ((*this)->left != nullptr)
                     {
-                        this->ptr = (*this)->left;
+                        this->_ptr = (*this)->left;
                     }
                 }
                 else
                 {
                     // Find the first `ancestor` which is not smaller than `this`.
-                    bst_node * prev = this->ptr;
-                    this->ptr = (*this)->father;
+                    bst_node * prev = this->_ptr;
+                    this->_ptr = (*this)->father;
                     while (prev == (*this)->right)
                     {
-                        prev = this->ptr;
-                        this->ptr = (*this)->father;
+                        prev = this->_ptr;
+                        this->_ptr = (*this)->father;
                     }
                 }
                 return *this;
@@ -112,7 +112,7 @@ namespace fsa
             bst_iterator operator++(int)
             {
                 bst_iterator tmp_iter = *this;
-                *(this)++;
+                operator++();
                 return tmp_iter;
             }
 
@@ -121,21 +121,21 @@ namespace fsa
                 // If `left` is not empty, find the largest node in the subtree.
                 if ((*this)->left != nullptr)
                 {
-                    this->ptr = (*this)->left;
+                    this->_ptr = (*this)->left;
                     while ((*this)->right != nullptr)
                     {
-                        this->ptr = (*this)->right;
+                        this->_ptr = (*this)->right;
                     }
                 }
                 else
                 {
                     // Find the first `ancestor` which is not greater than `this`.
-                    bst_node * prev = this->ptr;
-                    this->ptr = (*this)->father;
+                    bst_node * prev = this->_ptr;
+                    this->_ptr = (*this)->father;
                     while (prev == (*this)->left)
                     {
-                        prev = this->ptr;
-                        this->ptr = (*this)->father;
+                        prev = this->_ptr;
+                        this->_ptr = (*this)->father;
                     }
                 }
                 return *this;
@@ -144,7 +144,7 @@ namespace fsa
             bst_iterator operator--(int)
             {
                 bst_iterator tmp_iter = *this;
-                *(this)--;
+                operator--;
                 return tmp_iter;
             }
 

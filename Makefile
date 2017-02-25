@@ -1,4 +1,4 @@
-.PHONY: lib clear test build_test
+.PHONY: lib clear test build_test msg_test
 
 LIB=bstree
 TEST=test_case
@@ -10,6 +10,8 @@ clear:
 
 test: $(TEST).o
 	./$^
+
+msg_test: test_with_message
 
 test_with_message: $(TEST).o
 	./$^ --log_level=message
