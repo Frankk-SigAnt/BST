@@ -148,12 +148,12 @@ namespace fsa
                 return tmp_iter;
             }
 
-            bool operator==(bst_iterator && _it)
+            bool operator==(bst_iterator _it)
             {
                 return _ptr == _it._ptr;
             }
 
-            bool operator!=(bst_iterator && _it)
+            bool operator!=(bst_iterator _it)
             {
                 return _ptr != _it._ptr;
             }
@@ -315,13 +315,13 @@ namespace fsa
 
             // Adjust size, `left_most` and `right_most`.
             ++_size;
-            if (_header_ptr->left->right != nullptr)
+            if (_right_most()->right)
             {
-                _header_ptr->left = _header_ptr->left->right;
+                _right_most() = _right_most()->right;
             }
-            if (_header_ptr->right->left != nullptr)
+            if (_left_most()->left)
             {
-                _header_ptr->right = _header_ptr->right->left;
+                _left_most() = _left_most()->left;
             }
         }
     }
