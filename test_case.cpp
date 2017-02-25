@@ -74,12 +74,26 @@ BOOST_AUTO_TEST_CASE(insert_work_expectly)
     }
 }
 
+BOOST_AUTO_TEST_CASE(begin_end_works_expectly)
+{
+    fsa::debug_bstree<int> tree_a;
+    tree_a.insert(3);
+    BOOST_CHECK_EQUAL(*tree_a.begin(), 3);
+    BOOST_CHECK_EQUAL(*tree_a.end(), 3);
+    tree_a.insert(27);
+    BOOST_CHECK_EQUAL(*tree_a.begin(), 3);
+    BOOST_CHECK_EQUAL(*tree_a.end(), 27);
+    tree_a.insert(2);
+    BOOST_CHECK_EQUAL(*tree_a.begin(), 2);
+    BOOST_CHECK_EQUAL(*tree_a.end(), 27);
+}
+
 BOOST_AUTO_TEST_CASE(iterators_works_expectly)
 {
     fsa::debug_bstree<int> tree_a;
     std::vector<int> vect_a;
 
-    std::srand(time(0));
+    std::srand(13627);
     std::rand();
     for (int i = 0; i < 20; i++)
     {
@@ -88,13 +102,7 @@ BOOST_AUTO_TEST_CASE(iterators_works_expectly)
         tree_a.insert(tmp);
     }
     std::sort(vect_a.begin(), vect_a.end());
+    vect_a.erase(std::unique(vect_a.begin(), vect_a.end()), vect_a.end());
 
-    std::vector<int>::iterator vect_it = vect_a.begin();
-    fsa::debug_bstree<int>::iterator tree_it = tree_a.begin();
-    for (int i = 0; i < 20; i++)
-    {
-        BOOST_CHECK_EQUAL(*tree_it, *vect_it);
-        tree_it++;
-        vect_it++;
-    }
+    BOOST_CHECK_EQUAL_COLLECTIONS(tree_a.begin(), tree_a.end(), vect_a.begin(), vect_a.end());
 }
