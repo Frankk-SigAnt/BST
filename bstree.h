@@ -144,7 +144,7 @@ namespace fsa
             bst_iterator operator--(int)
             {
                 bst_iterator tmp_iter = *this;
-                operator--;
+                operator--();
                 return tmp_iter;
             }
 

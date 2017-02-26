@@ -74,6 +74,7 @@ BOOST_AUTO_TEST_CASE(insert_work_expectly)
     }
 }
 
+// TODO: Add string specialization
 BOOST_AUTO_TEST_CASE(begin_end_works_expectly)
 {
     fsa::debug_bstree<int> tree_a;
@@ -88,6 +89,37 @@ BOOST_AUTO_TEST_CASE(begin_end_works_expectly)
     BOOST_CHECK_EQUAL(*(--tree_a.end()), 27);
 }
 
+// TODO: Add string specialization
+BOOST_AUTO_TEST_CASE(test_iterator_in_decrease)
+{
+    fsa::debug_bstree<int> tree_a;
+    tree_a.insert(9);
+    tree_a.insert(7);
+    tree_a.insert(86);
+    tree_a.insert(26);
+    // tree_a = {7, 9, 26, 86}
+
+    // Increase
+    auto it = tree_a.begin();
+    BOOST_CHECK_EQUAL(*it, 7);
+    ++it;
+    BOOST_CHECK_EQUAL(*it, 9);
+    auto orig_it = it++;
+    BOOST_CHECK_EQUAL(*it, 26);
+    BOOST_CHECK_EQUAL(*orig_it, 9);
+    auto same_it = ++it;
+    BOOST_CHECK_EQUAL(*it, 86);
+    BOOST_CHECK_EQUAL(*same_it, 86);
+
+    // Decrease
+    orig_it = it--;
+    BOOST_CHECK_EQUAL(*it, 26);
+    BOOST_CHECK_EQUAL(*orig_it, 86);
+    // TODO: decrease from end()
+    // TODO: `--it`
+}
+
+// TODO: Add string specialization
 BOOST_AUTO_TEST_CASE(iterators_works_expectly)
 {
     fsa::debug_bstree<int> tree_a;
