@@ -148,12 +148,12 @@ namespace fsa
                 return tmp_iter;
             }
 
-            bool operator==(bst_iterator _it)
+            bool operator==(const bst_iterator & _it)
             {
                 return _ptr == _it._ptr;
             }
 
-            bool operator!=(bst_iterator _it)
+            bool operator!=(const bst_iterator & _it)
             {
                 return _ptr != _it._ptr;
             }
