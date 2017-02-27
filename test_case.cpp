@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(test_iterator_in_decrease)
     tree_a.insert(7);
     tree_a.insert(86);
     tree_a.insert(26);
-    // tree_a = {7, 9, 26, 86}
+    // tree_a == {7, 9, 26, 86}
 
     // Increase
     auto it = tree_a.begin();
@@ -115,8 +115,10 @@ BOOST_AUTO_TEST_CASE(test_iterator_in_decrease)
     orig_it = it--;
     BOOST_CHECK_EQUAL(*it, 26);
     BOOST_CHECK_EQUAL(*orig_it, 86);
-    // TODO: decrease from end()
-    // TODO: `--it`
+    it = tree_a.end();
+    same_it = --it;
+    BOOST_CHECK_EQUAL(*it, 86);
+    BOOST_CHECK_EQUAL(*same_it, 86);
 }
 
 // TODO: Add string specialization

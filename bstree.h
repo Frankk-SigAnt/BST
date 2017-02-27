@@ -3,6 +3,8 @@
 
 #include <utility>
 #include <iostream>
+#include <iterator>
+#include <cstddef>
 
 namespace fsa
 {
@@ -69,17 +71,25 @@ namespace fsa
 
         struct bst_iterator
         {
-            bst_node * _ptr;
+            typedef T                                value_type;
+            typedef T &                              reference;
+            typedef size_t                           size_type;
+            typedef ptrdiff_t                        difference_type;
+            typedef std::bidirectional_iterator_tag  iterator_category;
 
-            bst_iterator(bst_node * _Ptr = nullptr) : _ptr(_Ptr) {}
+            typedef bst_node * link_type;
+
+            link_type _ptr;
+
+            bst_iterator(link_type _Ptr = nullptr) : _ptr(_Ptr) {}
             bst_iterator(const bst_iterator & _it) : _ptr(_it._ptr) {}
 
-            T & operator*()
+            value_type & operator*()
             {
                 return _ptr->data;
             }
 
-            bst_node * operator->()
+            link_type operator->()
             {
                 return _ptr;
             }
@@ -98,7 +108,7 @@ namespace fsa
                 else
                 {
                     // Find the first `ancestor` which is not smaller than `this`.
-                    bst_node * prev = this->_ptr;
+                    link_type prev = this->_ptr;
                     this->_ptr = (*this)->father;
                     while (prev == (*this)->right)
                     {
@@ -130,7 +140,7 @@ namespace fsa
                 else
                 {
                     // Find the first `ancestor` which is not greater than `this`.
-                    bst_node * prev = this->_ptr;
+                    link_type prev = this->_ptr;
                     this->_ptr = (*this)->father;
                     while (prev == (*this)->left)
                     {
@@ -165,13 +175,13 @@ namespace fsa
         typedef bst_node      node_type;
         typedef bst_node *    pointer;
         typedef bst_iterator  iterator;
-        typedef unsigned int  size_type;
+        typedef size_t        size_type;
+        typedef ptrdiff_t     difference_type;
 
-    private:
+    protected:
         pointer _header_ptr;
         size_type _size;
 
-    protected:
         pointer & _root() const { return _header_ptr->father; }
         pointer & _left_most() { return _header_ptr->right; }
         pointer &  _right_most() { return _header_ptr->left; }
@@ -196,13 +206,12 @@ namespace fsa
         bool empty() const { return (_root() == _header_ptr); }
         iterator begin() { return iterator(_left_most()); }
         iterator end() { return iterator(_header_ptr); }
-        reference front() const { return _left_most()->data; }
-        reference back() const { return _right_most()->data; }
         iterator find(const value_type & _val);
 
         // Modifiers.
         void clear();
         void insert(const value_type & _val);
+        // TODO
         void erase(iterator _pos);
         void remove(value_type & _val);
         void swap(bstree & _opr);
