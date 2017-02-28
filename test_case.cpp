@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(it_works)
     BOOST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
+BOOST_AUTO_TEST_CASE(empty_and_size_work_expectedly)
 {
     // Defualt constructs empty
     fsa::debug_bstree<int> tree_a;
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(empty_and_size_work_expectly)
     BOOST_CHECK_EQUAL(tree_a.size(), 0);
 }
 
-BOOST_AUTO_TEST_CASE(insert_work_expectly)
+BOOST_AUTO_TEST_CASE(insert_work_expectedly)
 {
     fsa::debug_bstree<int> tree_a;
     tree_a.insert(1);
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(insert_work_expectly)
 }
 
 // TODO: Add string specialization
-BOOST_AUTO_TEST_CASE(begin_end_works_expectly)
+BOOST_AUTO_TEST_CASE(begin_end_works_expectedly)
 {
     fsa::debug_bstree<int> tree_a;
     tree_a.insert(3);
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(test_iterator_in_decrease)
 }
 
 // TODO: Add string specialization
-BOOST_AUTO_TEST_CASE(iterators_works_expectly)
+BOOST_AUTO_TEST_CASE(iterators_works_expectedly)
 {
     fsa::debug_bstree<int> tree_a;
     std::vector<int> vect_a;
@@ -139,4 +139,43 @@ BOOST_AUTO_TEST_CASE(iterators_works_expectly)
     vect_a.erase(std::unique(vect_a.begin(), vect_a.end()), vect_a.end());
 
     BOOST_CHECK_EQUAL_COLLECTIONS(tree_a.begin(), tree_a.end(), vect_a.begin(), vect_a.end());
+}
+
+BOOST_AUTO_TEST_CASE(test_comparison_operators_for_iterators)
+{
+    fsa::debug_bstree<int> tree_a;
+
+    tree_a.insert(123);
+    tree_a.insert(234);
+    tree_a.insert(345);
+    // tree_a == {123, 234, 345}
+
+    auto it_a = tree_a.begin(), it_b = it_a;
+    BOOST_CHECK(it_a == it_b);
+    ++it_b;
+    BOOST_CHECK(it_a != it_b);
+}
+
+BOOST_AUTO_TEST_CASE(funcion_find_work_expectedly)
+{
+    fsa::debug_bstree<int> tree_a;
+
+    tree_a.insert(234);
+    tree_a.insert(20);
+    tree_a.insert(5000);
+    tree_a.insert(46928);
+    tree_a.insert(24);
+    tree_a.insert(1);
+    tree_a.insert(5724);
+    // tree_a == {1, 20, 24, 234, 5000, 5724, 46928}
+
+    // Search for elements existing in the tree.
+    auto f_it = tree_a.find(5724);
+    BOOST_CHECK_EQUAL(*f_it, 5724);
+    f_it = tree_a.find(20);
+    BOOST_CHECK_EQUAL(*f_it, 20);
+    // Search for elements not existing in the tree.
+    // Return value `end()` expected.
+    f_it = tree_a.find(30);
+    BOOST_CHECK(f_it == tree_a.end());
 }

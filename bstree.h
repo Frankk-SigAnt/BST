@@ -73,15 +73,13 @@ namespace fsa
         {
             typedef T                                value_type;
             typedef T &                              reference;
-            typedef size_t                           size_type;
+            typedef bst_node *                       pointer;
             typedef ptrdiff_t                        difference_type;
             typedef std::bidirectional_iterator_tag  iterator_category;
 
-            typedef bst_node * link_type;
+            pointer _ptr;
 
-            link_type _ptr;
-
-            bst_iterator(link_type _Ptr = nullptr) : _ptr(_Ptr) {}
+            bst_iterator(pointer _Ptr = nullptr) : _ptr(_Ptr) {}
             bst_iterator(const bst_iterator & _it) : _ptr(_it._ptr) {}
 
             value_type & operator*()
@@ -89,7 +87,7 @@ namespace fsa
                 return _ptr->data;
             }
 
-            link_type operator->()
+            pointer operator->()
             {
                 return _ptr;
             }
@@ -108,7 +106,7 @@ namespace fsa
                 else
                 {
                     // Find the first `ancestor` which is not smaller than `this`.
-                    link_type prev = this->_ptr;
+                    pointer prev = this->_ptr;
                     this->_ptr = (*this)->father;
                     while (prev == (*this)->right)
                     {
@@ -140,7 +138,7 @@ namespace fsa
                 else
                 {
                     // Find the first `ancestor` which is not greater than `this`.
-                    link_type prev = this->_ptr;
+                    pointer prev = this->_ptr;
                     this->_ptr = (*this)->father;
                     while (prev == (*this)->left)
                     {
@@ -158,12 +156,12 @@ namespace fsa
                 return tmp_iter;
             }
 
-            bool operator==(const bst_iterator & _it)
+            bool operator==(const bst_iterator & _it) const
             {
                 return _ptr == _it._ptr;
             }
 
-            bool operator!=(const bst_iterator & _it)
+            bool operator!=(const bst_iterator & _it) const
             {
                 return _ptr != _it._ptr;
             }
