@@ -183,6 +183,7 @@ namespace fsa
         pointer & _root() const { return _header_ptr->father; }
         pointer & _left_most() { return _header_ptr->right; }
         pointer &  _right_most() { return _header_ptr->left; }
+        pointer _erase_impl(iterator _pos);
 
     public:
         // Con-/De-structors and `operator=`.
@@ -333,7 +334,89 @@ namespace fsa
         }
     }
 
+    template<class T>
+    void bstree<T>::erase(bstree<T>::iterator _pos)
+    {
+        pointer __it = _erase_impl(_pos);
+        delete __it;
+    }
 
+    template<class T>
+    bstree<T>::pointer bstree<T>::_erase_impl(bstree<T>::iterator _pos)
+    {
+        pointer __z = _pos._ptr;
+        pointer __y = __z;
+        pointer __x = 0;
+
+        if (__z->left == 0)
+            __x = __z->right; // Case #a: x may be null.
+        else
+            if (__z->right == 0)
+                __x = __z->right; // Case #b: x is non-null.
+            else
+            {
+                __y = __z->right;
+                while (__y->left != 0)
+                    __y = __y->left; // Case #c: y is successor of z.
+                __x = __y->right; // x may be null.
+            }
+
+        if (__y != __z) // Case #c: z has two sons, y is successor of z.
+        {
+            // Move z->left to be y->left.
+            __z->left->father = __y;
+            __y->left = __z->left;
+
+            if (__y != __z->right)
+            {
+                // Move x to be y->father->left, even x is null.
+                if (__x)
+                    __x->father = __y->father;
+                __y->father->left = __x;
+
+                // Move z->right to be y->right.
+                __y->right = __z->right;
+                __z->right->father = __y;
+            }
+            // If y is the right son of z, do nothing.
+
+            // Move z->father to be y->father.
+            _move_father(__z, __y); // TODO
+        }
+        else // Cases #a & #b: z has at most one son, i.e. x. Replace z with x.
+        {
+            if (__x)
+                __x->father = __z->father;
+            
+            // Move z->father to be x->father.
+            _move_father(__z, __x);
+
+            // adjust `left_most` and `right_most`.
+            pointer & _Leftmost = _left_most();
+            pointer & _Rightmost = _right_most();
+            if (_Leftmost == __z)
+                if (__z->right == 0)
+                    _Leftmost = __z->father;
+                else
+                {
+                    pointer __tmp = __x;
+                    while (__tmp->left != 0)
+                        __tmp = __tmp->left;
+                    _Leftmost = __tmp;
+                }
+            if (_Rightmost == __z)
+                if (__z->left == 0)
+                    _Rightmost = __z->father;
+                else
+                {
+                    pointer __tmp = __x;
+                    while (__tmp->right != 0)
+                        __tmp = __tmp->right;
+                    _Rightmost = __tmp;
+                }
+
+        return __z;
+    }
 
     template<class T>
     class debug_bstree : public bstree<T>
