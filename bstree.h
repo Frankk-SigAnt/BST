@@ -4,6 +4,7 @@
 #include <utility>
 #include <iostream>
 #include <iterator>
+#include <algorithm>
 #include <cstddef>
 
 namespace fsa
@@ -43,6 +44,11 @@ namespace fsa
             {
                 delete left;
                 delete right;
+            }
+
+            void __forget()
+            {
+                operator delete(this);
             }
 
             void __dbg_print_node(int level = 0)
@@ -184,6 +190,9 @@ namespace fsa
         pointer & _left_most() { return _header_ptr->right; }
         pointer &  _right_most() { return _header_ptr->left; }
         pointer _erase_impl(iterator _pos);
+        void _move_father(pointer _from, pointer _to);
+        pointer _maximum(pointer _subtree);
+        pointer _minimum(pointer _subtree);
 
     public:
         // Con-/De-structors and `operator=`.
@@ -210,10 +219,10 @@ namespace fsa
         // Modifiers.
         void clear();
         void insert(const value_type & _val);
-        // TODO
         void erase(iterator _pos);
-        void remove(value_type & _val);
+        void remove(const value_type & _val);
         void swap(bstree & _opr);
+        // TODO
         void splice(bstree & _opr);
     };
 
@@ -232,9 +241,7 @@ namespace fsa
     inline bstree<T>::~bstree()
     {
         clear();
-        // Reset hanging pointer.
-        _header_ptr->left = _header_ptr->right = nullptr;
-        delete _header_ptr;
+        _header_ptr->__forget();
     }
 
     template<class T>
@@ -342,7 +349,7 @@ namespace fsa
     }
 
     template<class T>
-    bstree<T>::pointer bstree<T>::_erase_impl(bstree<T>::iterator _pos)
+    typename bstree<T>::pointer bstree<T>::_erase_impl(bstree<T>::iterator _pos)
     {
         pointer __z = _pos._ptr;
         pointer __y = __z;
@@ -370,7 +377,7 @@ namespace fsa
             if (__y != __z->right)
             {
                 // Move x to be y->father->left, even x is null.
-                if (__x)
+                if (__x != nullptr)
                     __x->father = __y->father;
                 __y->father->left = __x;
 
@@ -381,11 +388,11 @@ namespace fsa
             // If y is the right son of z, do nothing.
 
             // Move z->father to be y->father.
-            _move_father(__z, __y); // TODO
+            _move_father(__z, __y);
         }
         else // Cases #a & #b: z has at most one son, i.e. x. Replace z with x.
         {
-            if (__x)
+            if (__x != nullptr)
                 __x->father = __z->father;
             
             // Move z->father to be x->father.
@@ -398,24 +405,61 @@ namespace fsa
                 if (__z->right == 0)
                     _Leftmost = __z->father;
                 else
-                {
-                    pointer __tmp = __x;
-                    while (__tmp->left != 0)
-                        __tmp = __tmp->left;
-                    _Leftmost = __tmp;
-                }
+                    _Leftmost = _minimum(__x);
             if (_Rightmost == __z)
                 if (__z->left == 0)
                     _Rightmost = __z->father;
                 else
-                {
-                    pointer __tmp = __x;
-                    while (__tmp->right != 0)
-                        __tmp = __tmp->right;
-                    _Rightmost = __tmp;
-                }
+                    _Rightmost = _maximum(__x);
+        }
 
         return __z;
+    } 
+
+    template<class T>
+    inline void bstree<T>::_move_father(bstree<T>::pointer _from, bstree<T>::pointer _to)
+    {
+        if (_root() == _from)
+            _root() = _to;
+        else if(_from->father->left == _from)
+            _from->father->left = _to;
+        else if(_from->father->right == _from)
+            _from->father->right = _to;
+
+        if (_to != nullptr)
+            _to->father = _from->father;
+    }
+
+    template<class T>
+    inline typename bstree<T>::pointer bstree<T>::_minimum(bstree<T>::pointer _subtree)
+    {
+        pointer _tmp = _subtree;
+        while (_tmp->right != 0)
+            _tmp = _tmp->right;
+        return _tmp;
+    }
+
+    template<class T>
+    inline typename bstree<T>::pointer bstree<T>::_maximum(bstree<T>::pointer _subtree)
+    {
+        pointer _tmp = _subtree;
+        while (_tmp->left != 0)
+            _tmp = _tmp->left;
+        return _tmp;
+    }
+
+    template<class T>
+    void bstree<T>::remove(const bstree<T>::value_type & _val)
+    {
+        iterator _it = find(_val);
+        erase(_it);
+    }
+
+    template<class T>
+    void bstree<T>::swap(bstree<T> & _opr)
+    {
+        std::swap(_header_ptr, _opr._header_ptr);
+        std::swap(_size, _opr.size);
     }
 
     template<class T>
