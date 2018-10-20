@@ -4,6 +4,7 @@
 #include <utility>
 #include <iostream>
 #include <iterator>
+#include <algorithm>
 #include <cstddef>
 
 namespace fsa
@@ -254,9 +255,9 @@ namespace fsa
         void clear();
         void insert(const value_type & _val);
         void erase(iterator _pos);
-        // TODO
-        void remove(value_type & _val);
+        void remove(const value_type & _val);
         void swap(bstree & _opr);
+        // TODO
         void splice(bstree & _opr);
     };
 
@@ -458,6 +459,7 @@ namespace fsa
                     _Leftmost = _minimum(__x);
                 }
             }
+                    _Leftmost = _minimum(__x);
             if (_Rightmost == __z)
             {
                 if (__z->left == 0)
@@ -516,6 +518,20 @@ namespace fsa
             _tmp = _tmp->left;
         }
         return _tmp;
+    }
+
+    template<class T>
+    void bstree<T>::remove(const bstree<T>::value_type & _val)
+    {
+        iterator _it = find(_val);
+        erase(_it);
+    }
+
+    template<class T>
+    void bstree<T>::swap(bstree<T> & _opr)
+    {
+        std::swap(_header_ptr, _opr._header_ptr);
+        std::swap(_size, _opr.size);
     }
 
 #ifdef __DEBUG_MODE

@@ -203,3 +203,21 @@ BOOST_AUTO_TEST_CASE(function_erase_works_expectedly)
     BOOST_CHECK(f_it == tree_a.end());
 }
 
+BOOST_AUTO_TEST_CASE(function_remove_works_expectedly)
+{
+    fsa::debug_bstree<int> tree_a;
+    tree_a.insert(234);
+    tree_a.insert(20);
+    tree_a.insert(5000);
+    tree_a.insert(46928);
+    tree_a.insert(24);
+    tree_a.insert(1);
+    tree_a.insert(5724);
+    // tree_a == {1, 20, 24, 234, 5000, 5724, 46928}
+
+    tree_a.remove(234);
+    // Value 234 has already been removed. Find it.
+    // Return value `end()` expected.
+    auto f_it = tree_a.find(234);
+    BOOST_CHECK(f_it == tree_a.end());
+}

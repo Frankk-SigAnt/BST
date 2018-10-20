@@ -6,7 +6,7 @@ TEST=test_case
 lib: $(LIB).o
 
 clear: 
-	rm *.o
+	rm *.o tags
 
 test: $(TEST).o
 	./$^
