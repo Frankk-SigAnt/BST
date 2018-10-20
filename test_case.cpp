@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <boost/test/included/unit_test.hpp> 
 
-// Just ensure that the functions exeicuted and returned
+// Just ensure that the functions executed and returned
 BOOST_AUTO_TEST_CASE(it_works)
 {
     // defualt constructor
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(test_comparison_operators_for_iterators)
     BOOST_CHECK(it_a != it_b);
 }
 
-BOOST_AUTO_TEST_CASE(funcion_find_work_expectedly)
+BOOST_AUTO_TEST_CASE(funcion_find_works_expectedly)
 {
     fsa::debug_bstree<int> tree_a;
 
@@ -179,3 +179,27 @@ BOOST_AUTO_TEST_CASE(funcion_find_work_expectedly)
     f_it = tree_a.find(30);
     BOOST_CHECK(f_it == tree_a.end());
 }
+
+BOOST_AUTO_TEST_CASE(function_erase_works_expectedly)
+{
+    fsa::debug_bstree<int> tree_a;
+
+    tree_a.insert(234);
+    tree_a.insert(20);
+    tree_a.insert(5000);
+    tree_a.insert(46928);
+    tree_a.insert(24);
+    tree_a.insert(1);
+    tree_a.insert(5724);
+    // tree_a == {1, 20, 24, 234, 5000, 5724, 46928}
+
+    // Search for elements existing in the tree.
+    auto f_it = tree_a.find(234);
+    BOOST_CHECK_EQUAL(*f_it, 234);
+    tree_a.erase(f_it);
+    // Value 234 has already erased. Find it again.
+    // Return value `end()` expected.
+    f_it = tree_a.find(234);
+    BOOST_CHECK(f_it == tree_a.end());
+}
+

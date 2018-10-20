@@ -19,8 +19,8 @@ test_with_message: $(TEST).o
 build_test: $(TEST).o
 	
 $(LIB).o: $(LIB).h
-	g++ $^ -o $@ --std=c++1y
+	g++ $^ -o $@ --std=c++1y -D __DEBUG_MODE
 
 # We use the Boost Unit Test Framework
 $(TEST).o: $(TEST).cpp $(LIB).h
-	g++ $< -o $@ -std=c++1y -lboost_unit_test_framework -g3
+	g++ $< -o $@ -std=c++1y -lboost_unit_test_framework -g3 -D __DEBUG_MODE
